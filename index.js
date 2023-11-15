@@ -9,7 +9,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // Log in to Discord with your client's token
 const token = process.env.token;
-client.login(token).then(r => console.log("Ignored"));
+client.login(token);
 
 // Create commands collection
 client.commands = new Collection();
@@ -62,8 +62,8 @@ client.on(Events.InteractionCreate, async interaction => {
                 await interaction.reply({content: 'There was an error while executing this command!', ephemeral: true});
             }
         }
-    }});
-
+    }
+});
 
 // When the client is ready, run this code (only once)
 // We use 'c' for the event parameter to keep it separate from the already defined 'client'
