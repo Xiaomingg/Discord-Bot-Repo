@@ -32,10 +32,8 @@ for (const folder of commandFolders) {
     }
 }
 
-// Only handle slash commands
-client.on(Events.InteractionCreate, interaction => {
-    if (!interaction.isChatInputCommand()) return;
-    console.log(interaction);
+client.once(Events.ClientReady, c => {
+    console.log(`Ready! Logged in as ${c.user.tag}`);
 });
 
 // Match commands from client.commands. Log an error if no command is found
@@ -64,11 +62,3 @@ client.on(Events.InteractionCreate, async interaction => {
             }
         }
     });
-
-// When the client is ready, run this code (only once)
-// We use 'c' for the event parameter to keep it separate from the already defined 'client'
-        client.once(Events.ClientReady, c => {
-            console.log(`Ready! Logged in as ${c.user.tag}`);
-        });
-
-
