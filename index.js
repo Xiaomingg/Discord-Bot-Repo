@@ -4,6 +4,15 @@ const path = require('node:path');
 const { Client, Events, GatewayIntentBits, Collection} = require('discord.js');
 require('dotenv').config();
 
+// Ping Heroku to keep the bot on to make sure it doesn't shut down
+const http = require("http");
+http.createServer((req, res) => {
+    res.end();
+}).listen(process.env.PORT || 3000);
+setInterval(() => {
+    http.get(process.env.link)
+}, 300000);
+
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -62,3 +71,11 @@ client.on(Events.InteractionCreate, async interaction => {
             }
         }
     });
+
+// Riot API
+const riotApiToken = process.env.riot_token;
+const riotApiURL = "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Xioming"
+
+//fetch(riotApiURL + "?api_key=" + riotApiToken).then(r => {console.log(r)});
+//console.log(riotApiURL + "?" + riotApiToken)
+
