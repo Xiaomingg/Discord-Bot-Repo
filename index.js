@@ -76,6 +76,3 @@ client.on(Events.InteractionCreate, async interaction => {
 const riotApiToken = process.env.riot_token;
 const riotApiURL = "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Xioming"
 
-//fetch(riotApiURL + "?api_key=" + riotApiToken).then(r => {console.log(r)});
-//console.log(riotApiURL + "?" + riotApiToken)
-
