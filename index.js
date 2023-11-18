@@ -11,7 +11,7 @@ http.createServer((req, res) => {
 }).listen(process.env.PORT || 3000);
 setInterval(() => {
     http.get(process.env.link)
-}, 300000);
+}, 30000000);
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
