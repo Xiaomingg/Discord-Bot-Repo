@@ -16,9 +16,8 @@ setInterval(() => {
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-// Log in to Discord with your client's token
-const token = process.env.token;
-client.login(token);
+// Log in to Discord with the token
+client.login(process.env.token);
 
 // Create commands collection
 client.commands = new Collection();
@@ -64,15 +63,11 @@ client.on(Events.InteractionCreate, async interaction => {
             if (interaction.replied || interaction.deferred) {
                 await interaction.followUp({
                     content: 'There was an error while executing this command!',
-                    ephemeral: true
+                    ephemeral: false
                 });
             } else {
-                await interaction.reply({content: 'There was an error while executing this command!', ephemeral: true});
+                await interaction.reply({content: 'There was an error while executing this command!', ephemeral: false});
             }
         }
     });
-
-// Riot API
-const riotApiToken = process.env.riot_token;
-const riotApiURL = "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Xioming"
 

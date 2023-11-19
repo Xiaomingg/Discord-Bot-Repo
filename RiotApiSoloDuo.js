@@ -15,24 +15,31 @@ async function playerData(summonerName) {
         //console.log(playerIdData)
 
     const response2 = await fetch(riotApiLeagueV4 + playerIdData + "?api_key=" + riotApiToken);
-    let rankData = await response2.json();
-    //console.log(rankData)
-    const rankedSoloDuo = rankData[1]
-    //console.log(rankedSoloDuo)
-    const tier = rankedSoloDuo.tier;
-    const rank = rankedSoloDuo.rank;
-    const leaguePoints = rankedSoloDuo.leaguePoints;
-    const wins = rankedSoloDuo.wins;
-    const losses = rankedSoloDuo.losses;
-    const winRate = (wins/(wins+losses) * 100)
-    const winRateRounded = winRate.toFixed(2)
-    let statement = (`Your rank is ${tier} ${rank}LP with a win rate of ${winRateRounded}%`)
-
-
-
-}
-
-//playerData('pranll 2')
-
+    const rankData = await response2.json();
+    if (Array.isArray(rankData)) {
+        const rankedSoloDuo = rankData.filter(entry => entry.queueType === 'RANKED_SOLO_5x5')
+        //console.log(rankData)
+        //console.log(rankedSoloDuo)
+        //console.log(rankedSoloDuo)
+        rankedSoloDuo.forEach(rankedSoloDuo => {
+        const tier = rankedSoloDuo.tier;
+        const rank = rankedSoloDuo.rank;
+        const leaguePoints = rankedSoloDuo.leaguePoints;
+        const wins = rankedSoloDuo.wins;
+        const losses = rankedSoloDuo.losses;
+        const winRate = (wins / (wins + losses) * 100)
+        const winRateRounded = winRate.toFixed(2)
+        const totalGames = wins + losses
+        const statement = (`${summonerName} is ${tier} ${rank} ${leaguePoints}LP with a win rate of ${winRateRounded}% in ${totalGames} games.`)
+            console.log(statement)
+    })
+}}
+//playerData("Silkysmoooth")
 // Export the function playerData
 module.exports = playerData;
+
+/*
+else {
+        console.error("Unexpected data structure from Riot API: ", rankData)
+        }
+ */
