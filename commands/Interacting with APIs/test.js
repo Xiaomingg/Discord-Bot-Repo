@@ -1,3 +1,4 @@
+const {SlashCommandBuilder} = require("discord.js");
 require('dotenv').config();
 
 // Riot API
@@ -6,7 +7,8 @@ const riotApiURL = "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-
 const riotApiLeagueV4 = "https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/"
 let playerIdData;
 let playerAllData;
-let All;
+let statement;
+let mida;
 
 // Get summoner's player ID and use the player's ID to see their rank details
 async function playerData(summonerName) {
@@ -30,8 +32,8 @@ async function playerData(summonerName) {
                 const winRate = (wins / (wins + losses) * 100);
                 const winRateRounded = winRate.toFixed(2);
                 const totalGames = wins + losses;
-                const statements = (`${summonerName} is ${tier} ${rank} ${leaguePoints}LP with a win rate of ${winRateRounded}% in ${totalGames} games.`)
-                console.log(statements)
+                statement = (`${summonerName} is ${tier} ${rank} ${leaguePoints} LP with a win rate of ${winRateRounded}% in ${totalGames} games.`)
+                console.log(statement)
             });
             resolve(statements);
         } else {
@@ -40,14 +42,29 @@ async function playerData(summonerName) {
     })
 }
 
-module.exports = playerData;
 
-//playerData("ColdPleb")
+module.exports = {
+    data: new SlashCommandBuilder()
+        .setName('test')
+        .setDescription("Provides an EUWs player's League of Legends Solo/Duo rank.")
+        .addStringOption(option => option.setName('summoner_name').setDescription('Enter the summoner name').setRequired(true)),
+    async execute(interaction) {
+        const summonerName = interaction.options.getString('summoner_name');
 
-console.log(All)
-
-/*
-else {
-        console.error("Unexpected data structure from Riot API: ", rankData)
+        if (!summonerName) {
+            return interaction.reply('Summoner name not given.');
         }
- */
+        //console.log(`Summoner Name: ${summonerName}`);
+
+        // Defer the reply
+        //await interaction.deferReply();
+        playerData().then (() => {
+            mida = statement;
+            interaction.reply(`hello ${mida}`)
+        });
+playerData(summonerName)
+
+        //let result = await playerData(summonerName);
+        //await interaction.reply(`hello ${result}`);
+    },
+};

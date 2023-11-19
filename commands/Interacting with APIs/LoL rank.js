@@ -18,9 +18,13 @@ module.exports = {
 
         // Defer the reply
         //await interaction.deferReply();
+        playerData().then (() => {
+            let mida = statements;
+            interaction.reply(`${mida}`)
+        });
 
-        let result = await playerData(summonerName);
-        await interaction.reply(`hello ${result}`);
+        //let result = await playerData(summonerName);
+        //await interaction.reply(`hello ${result}`);
     },
 };
 /*
