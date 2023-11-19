@@ -9,34 +9,40 @@ let playerAllData;
 
 // Get summoner's player ID and use the player's ID to see their rank details
 async function playerData(summonerName) {
-    const response = await fetch(riotApiURL + summonerName + "?api_key=" + riotApiToken);
+    return new Promise(async (resolve, reject) => {
+        const response = await fetch(riotApiURL + summonerName + "?api_key=" + riotApiToken);
         playerAllData = await response.json();
         playerIdData = playerAllData.id;
         //console.log(playerIdData)
 
-    const response2 = await fetch(riotApiLeagueV4 + playerIdData + "?api_key=" + riotApiToken);
-    const rankData = await response2.json();
-    if (Array.isArray(rankData)) {
-        const rankedSoloDuo = rankData.filter(entry => entry.queueType === 'RANKED_SOLO_5x5')
-        //console.log(rankData)
-        //console.log(rankedSoloDuo)
-        //console.log(rankedSoloDuo)
-        rankedSoloDuo.forEach(rankedSoloDuo => {
-        const tier = rankedSoloDuo.tier;
-        const rank = rankedSoloDuo.rank;
-        const leaguePoints = rankedSoloDuo.leaguePoints;
-        const wins = rankedSoloDuo.wins;
-        const losses = rankedSoloDuo.losses;
-        const winRate = (wins / (wins + losses) * 100)
-        const winRateRounded = winRate.toFixed(2)
-        const totalGames = wins + losses
-        const statement = (`${summonerName} is ${tier} ${rank} ${leaguePoints}LP with a win rate of ${winRateRounded}% in ${totalGames} games.`)
-            console.log(statement)
+        const response2 = await fetch(riotApiLeagueV4 + playerIdData + "?api_key=" + riotApiToken);
+        const rankData = await response2.json();
+        if (Array.isArray(rankData)) {
+            const rankedSoloDuo = rankData.filter(entry => entry.queueType === 'RANKED_SOLO_5x5')
+
+            const statements = rankedSoloDuo.map(rankedSoloDuo => {
+                const tier = rankedSoloDuo.tier;
+                const rank = rankedSoloDuo.rank;
+                const leaguePoints = rankedSoloDuo.leaguePoints;
+                const wins = rankedSoloDuo.wins;
+                const losses = rankedSoloDuo.losses;
+                const winRate = (wins / (wins + losses) * 100);
+                const winRateRounded = winRate.toFixed(2);
+                const totalGames = wins + losses;
+                console.log(`${summonerName} is ${tier} ${rank} ${leaguePoints}LP with a win rate of ${winRateRounded}% in ${totalGames} games.`)
+            });
+            resolve(statements);
+        } else {
+            reject(new Error('Rank data is not an array.'));
+        }
     })
-}}
-//playerData("Silkysmoooth")
-// Export the function playerData
+}
+
 module.exports = playerData;
+
+playerData("ColdPleb")
+
+
 
 /*
 else {
