@@ -1,5 +1,4 @@
 const { SlashCommandBuilder} = require('discord.js');
-const {callbackify} = require("util");
 let sim;
 let message;
 
