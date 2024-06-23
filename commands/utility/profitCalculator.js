@@ -16,6 +16,7 @@ module.exports = {
         .addStringOption(option => option.setName('sell').setDescription('How much sold for').setRequired(true))
         .addStringOption(option => option.setName('amount').setDescription('Amount of cards bought and sold').setRequired(true)),
     async execute(interaction) {
+
         const buy = interaction.options.getInteger('buy');
         const sell = interaction.options.getInteger('sell');
         const amount = interaction.options.getInteger('amount');

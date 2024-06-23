@@ -18,12 +18,12 @@ async function playerData(summonerName) {
         playerIdData = playerAllData.id;
         //console.log(playerIdData)
 
-        const response2 = await fetch(riotApiLeagueV4 + playerIdData + "?api_key=" + riotApiToken);
+        const response2 = await fetch(riotApiLeagueV4 + playerIdData + "?api_key=" + riotApiToken); // The link to get the second response
         const rankData = await response2.json();
         if (Array.isArray(rankData)) {
             const rankedSoloDuo = rankData.filter(entry => entry.queueType === 'RANKED_SOLO_5x5')
 
-            const statements = rankedSoloDuo.map(rankedSoloDuo => {
+            const statements = rankedSoloDuo.map(rankedSoloDuo => { // Filter the data
                 const tier = rankedSoloDuo.tier;
                 const rank = rankedSoloDuo.rank;
                 const leaguePoints = rankedSoloDuo.leaguePoints;
@@ -64,7 +64,5 @@ module.exports = {
         });
 playerData(summonerName)
 
-        //let result = await playerData(summonerName);
-        //await interaction.reply(`hello ${result}`);
     },
 };
