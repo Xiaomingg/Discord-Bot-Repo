@@ -2,13 +2,13 @@ const { SlashCommandBuilder } = require('discord.js');
 require('dotenv').config({ path: '../../.env'})
 
 // Riot API
-const riotAPIToken = process.env.RIOT_TOKEN;
+const riotAPIToken = process.env['RIOT_TOKEN'];
 const riotAPIAccountV1 = "https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/"
 const riotAPISummonerV4ByPUUID = "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/"
 const riotAPILeagueV4BySummoner = "https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/"
 
 // Need player name and tagline to get info
-let playerAccountV1Data, playerPUUID, playerAccountPUUIDData, playerData;
+let playerAccountV1Data, playerPUUID, playerAccountPUUIDData;
 let S1, S2, S3;
 let SoloDuoStatement, FlexStatement, ArenaStatement;
 
@@ -50,7 +50,6 @@ async function fetchData(playerName, tagline){
                 const totalGames = wins + losses;
 
                 SoloDuoStatement = (`${playerName} is ${tier} ${rank} ${leaguePoints} LP with a win rate of ${winRateRounded}% in ${totalGames} games of Ranked Solo/Duo.`)
-                console.log(SoloDuoStatement)
             });
             resolve(statements);
         } else {
@@ -108,6 +107,6 @@ module.exports = {
             interaction.reply(`${S2}`);
             interaction.reply(`${S3}`);
         })
-fetchData('SilkySmoooth', '1126')
+fetchData(playerName, tagline)
     },
 };
