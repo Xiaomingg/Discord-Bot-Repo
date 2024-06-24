@@ -28,7 +28,6 @@ async function fetchData(playerName, tagline){
         const response2 = await fetch(riotAPISummonerV4ByPUUID + playerPUUID + '?api_key=' + riotAPIToken)
         playerAccountPUUIDData = await response2.json();
         let playerID = playerAccountPUUIDData.id;
-        //console.log(playerAccountPUUIDData)
 
         // Get Rank Data
         const response3 = await fetch(riotAPILeagueV4BySummoner + playerID + '?api_key=' + riotAPIToken)
