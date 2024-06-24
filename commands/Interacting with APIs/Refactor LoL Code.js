@@ -8,9 +8,9 @@ const riotAPISummonerV4ByPUUID = "https://euw1.api.riotgames.com/lol/summoner/v4
 const riotAPILeagueV4BySummoner = "https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/"
 
 // Need player name and tagline to get info
-let playerName, tagline;
 let playerAccountV1Data, playerPUUID, playerAccountPUUIDData, playerData;
-let response;
+let S1, S2, S3;
+let SoloDuoStatement, FlexStatement, ArenaStatement;
 
 // Account V1 gets puuid, needs to get info from there
 // put puuid into summoner v4
@@ -48,7 +48,8 @@ async function fetchData(playerName, tagline){
                 const winRate = (wins / (wins + losses) * 100);
                 const winRateRounded = winRate.toFixed(2);
                 const totalGames = wins + losses;
-                const SoloDuoStatement = (`${playerName} is ${tier} ${rank} ${leaguePoints} LP with a win rate of ${winRateRounded}% in ${totalGames} games in Ranked Solo/Duo.`)
+
+                SoloDuoStatement = (`${playerName} is ${tier} ${rank} ${leaguePoints} LP with a win rate of ${winRateRounded}% in ${totalGames} games in Ranked Solo/Duo.`)
                 console.log(SoloDuoStatement)
             });
             resolve(statements);
@@ -65,7 +66,7 @@ async function fetchData(playerName, tagline){
                 const FlexWRR = (rankedFlex.wins / (rankedFlex.wins + rankedFlex.losses) * 100).toFixed(2)
                 const totalGames = rankedFlex.wins + rankedFlex.losses;
 
-                const FlexStatement = (`${playerName} is ${flexTier} ${flexRank} ${flexLeaguePoints} with a win rate of ${FlexWRR}% in ${totalGames} games in Ranked Flex.`)
+                FlexStatement = (`${playerName} is ${flexTier} ${flexRank} ${flexLeaguePoints} with a win rate of ${FlexWRR}% in ${totalGames} games in Ranked Flex.`)
                 console.log(FlexStatement)
             });
             resolve(statementFlex);
@@ -77,7 +78,7 @@ async function fetchData(playerName, tagline){
             const Arena = playerData.filter(entry => entry.queueType === 'CHERRY')
             const statsArena = Arena.map(Arena => {
                 const ArenaWR = (Arena.wins / (Arena.wins + Arena.losses) * 100).toFixed(2)
-                const ArenaStatement = (`${playerName} has a ${ArenaWR}% win rate in Arena.`)
+                ArenaStatement = (`${playerName} has a ${ArenaWR}% win rate in Arena in ${Arena.wins+Arena.losses} games.`)
                 console.log(ArenaStatement)
             })
         }
@@ -90,8 +91,29 @@ fetchData('SilkySmoooth', '1126')
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('relol')
-        .setDescription("Provides an EUWs player's League of Legends Solo/Duo rank."),
+        .setDescription("Provides an EUWs player's League of Legends Solo/Duo rank.")
+        .addStringOption(option => option.setName('summoner_name').setDescription('Enter the summoner name').setRequired(true))
+        .addStringOption(option => option.setName('tagline').setDescription('Enter the tagline').setRequired(true)),
     async execute(interaction) {
+        const playerName = interaction.options.getString('summoner_name');
+        const tagline = interaction.options.getString('tagline');
+
+        if (!playerName) {
+            return interaction.reply('Summoner name not given');
+        }
+        if (!tagline) {
+            return interaction.reply('Tagline not given');
+        }
         interaction.reply('Works?')
+
+        fetchData().then(() => {
+            S1 = SoloDuoStatement
+            S2 = FlexStatement
+            S3 = ArenaStatement
+            interaction.reply(`${S1}`)
+            interaction.reply(`${S2}`)
+            interaction.reply(`${S3}`)
+        })
+fetchData(playerName, tagline)
     }
 }
