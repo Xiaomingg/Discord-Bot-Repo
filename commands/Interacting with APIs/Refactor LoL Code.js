@@ -49,7 +49,7 @@ async function fetchData(playerName, tagline){
                 const winRateRounded = winRate.toFixed(2);
                 const totalGames = wins + losses;
 
-                SoloDuoStatement = (`${playerName} is ${tier} ${rank} ${leaguePoints} LP with a win rate of ${winRateRounded}% in ${totalGames} games in Ranked Solo/Duo.`)
+                SoloDuoStatement = (`${playerName} is ${tier} ${rank} ${leaguePoints} LP with a win rate of ${winRateRounded}% in ${totalGames} games of Ranked Solo/Duo.`)
                 console.log(SoloDuoStatement)
             });
             resolve(statements);
@@ -66,8 +66,7 @@ async function fetchData(playerName, tagline){
                 const FlexWRR = (rankedFlex.wins / (rankedFlex.wins + rankedFlex.losses) * 100).toFixed(2)
                 const totalGames = rankedFlex.wins + rankedFlex.losses;
 
-                FlexStatement = (`${playerName} is ${flexTier} ${flexRank} ${flexLeaguePoints} with a win rate of ${FlexWRR}% in ${totalGames} games in Ranked Flex.`)
-                console.log(FlexStatement)
+                FlexStatement = (`${playerName} is ${flexTier} ${flexRank} ${flexLeaguePoints} with a win rate of ${FlexWRR}% in ${totalGames} games of Ranked Flex.`)
             });
             resolve(statementFlex);
         } else {
@@ -79,19 +78,15 @@ async function fetchData(playerName, tagline){
             const statsArena = Arena.map(Arena => {
                 const ArenaWR = (Arena.wins / (Arena.wins + Arena.losses) * 100).toFixed(2)
                 ArenaStatement = (`${playerName} has a ${ArenaWR}% win rate in Arena in ${Arena.wins+Arena.losses} games.`)
-                console.log(ArenaStatement)
             })
         }
     })
 }
-
-// Calling a player
 fetchData('SilkySmoooth', '1126')
-
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('relol')
-        .setDescription("Provides an EUWs player's League of Legends Solo/Duo rank.")
+        .setDescription("Provides an EUWs player's League of Legends rank.")
         .addStringOption(option => option.setName('summoner_name').setDescription('Enter the summoner name').setRequired(true))
         .addStringOption(option => option.setName('tagline').setDescription('Enter the tagline').setRequired(true)),
     async execute(interaction) {
@@ -104,16 +99,15 @@ module.exports = {
         if (!tagline) {
             return interaction.reply('Tagline not given');
         }
-        interaction.reply('Works?')
 
         fetchData().then(() => {
-            S1 = SoloDuoStatement
-            S2 = FlexStatement
-            S3 = ArenaStatement
-            interaction.reply(`${S1}`)
-            interaction.reply(`${S2}`)
-            interaction.reply(`${S3}`)
+            S1 = SoloDuoStatement;
+            S2 = FlexStatement;
+            S3 = ArenaStatement;
+            interaction.reply(`${S1}`);
+            interaction.reply(`${S2}`);
+            interaction.reply(`${S3}`);
         })
-fetchData(playerName, tagline)
-    }
-}
+fetchData('SilkySmoooth', '1126')
+    },
+};
