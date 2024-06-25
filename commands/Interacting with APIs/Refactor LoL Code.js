@@ -18,9 +18,7 @@ let SoloDuoStatement, FlexStatement, ArenaStatement;
 
 async function fetchData(playerName, tagline){
     return new Promise (async (resolve, reject) => {
-        // const response = await fetch(riotAPIAccountV1 + playerName + "?api_key=" + riotApiToken)
         const response = await fetch(riotAPIAccountV1 + playerName + '/' + tagline + '?api_key=' + riotAPIToken)
-        //console.log(riotAPIAccountV1 + playerName + '/' + tagline + '?api_key=' + riotAPIToken)
         playerAccountV1Data = await response.json();
         playerPUUID = playerAccountV1Data.puuid;
 
@@ -32,7 +30,6 @@ async function fetchData(playerName, tagline){
         // Get Rank Data
         const response3 = await fetch(riotAPILeagueV4BySummoner + playerID + '?api_key=' + riotAPIToken)
         let playerData = await response3.json();
-        console.log(playerData)
 
         // Ranked Solo Duo Data
         if (Array.isArray(playerData)) {
@@ -80,7 +77,7 @@ async function fetchData(playerName, tagline){
         }
     })
 }
-fetchData('SilkySmoooth', '1126')
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('relol')
