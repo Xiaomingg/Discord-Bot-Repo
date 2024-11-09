@@ -46,6 +46,7 @@ async function fetchData(playerName, tagline){
                 const totalGames = wins + losses;
 
                 SoloDuoStatement = (`${playerName} is ${tier} ${rank} ${leaguePoints} LP with a win rate of ${winRateRounded}% in ${totalGames} games of Ranked Solo/Duo.`)
+                console.log(SoloDuoStatement)
             });
             resolve(statements);
         } else {
@@ -62,6 +63,7 @@ async function fetchData(playerName, tagline){
                 const totalGames = rankedFlex.wins + rankedFlex.losses;
 
                 FlexStatement = (`${playerName} is ${flexTier} ${flexRank} ${flexLeaguePoints} with a win rate of ${FlexWRR}% in ${totalGames} games of Ranked Flex.`)
+                console.log(FlexStatement)
             });
             resolve(statementFlex);
         } else {
@@ -73,11 +75,12 @@ async function fetchData(playerName, tagline){
             const statsArena = Arena.map(Arena => {
                 const ArenaWR = (Arena.wins / (Arena.wins + Arena.losses) * 100).toFixed(2)
                 ArenaStatement = (`${playerName} has a ${ArenaWR}% win rate in Arena in ${Arena.wins+Arena.losses} games.`)
+                console.log(ArenaStatement)
             })
         }
     })
 }
-
+fetchData('SilkySmoooth', '1126')
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('relol')
@@ -93,16 +96,12 @@ module.exports = {
         }
         if (!tagline) {
             return interaction.reply('Tagline not given');
-        }
-
-        fetchData().then(() => {
+        fetchData(playerName, tagline)
             S1 = SoloDuoStatement;
             S2 = FlexStatement;
             S3 = ArenaStatement;
-            interaction.reply(`${S1}`);
-            interaction.reply(`${S2}`);
-            interaction.reply(`${S3}`);
-        })
+            await interaction.reply(`${SoloDuoStatement}\n${S2}\n${S3}`)
+        }
 fetchData(playerName, tagline)
     },
 };
